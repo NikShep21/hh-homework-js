@@ -7,8 +7,8 @@
 - Немедленно реджектится при первой ошибке
 */
 
-function promiseAll(promises) {
-  const results = [];
+function promiseAll<T>(promises: (Promise<T> | T)[]): Promise<T[]> {
+  const results: T[] = [];
 
   return new Promise((resolve, reject) => {
     if (!promises.length) return resolve([]);
@@ -22,9 +22,7 @@ function promiseAll(promises) {
             resolve(results);
           }
         })
-        .catch((err) => {
-          reject(err);
-        });
+        .catch(reject);
     });
   });
 }
@@ -32,4 +30,4 @@ function promiseAll(promises) {
 const p1 = Promise.resolve(1);
 const p2 = Promise.resolve(2);
 
-promiseAll([p1, p2]).then(console.log); // [1, 2]
+promiseAll<number>([p1, p2]).then(console.log); // [1, 2]
