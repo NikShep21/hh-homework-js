@@ -14,9 +14,9 @@ function memoize<This, Args extends unknown[], R>(
 
   return function (this: This, ...args: Args): R {
     const key = JSON.stringify(args);
-
-    if (cache.has(key)) {
-      return cache.get(key)!;
+    const cached = cache.get(key);
+    if (cached !== undefined) {
+      return cached;
     }
     const result = fn.apply(this, args);
 
