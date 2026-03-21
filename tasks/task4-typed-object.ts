@@ -37,16 +37,16 @@ function typedObject<T extends Schema>(schema: T): TypedObjectFromSchema<T> {
       if (typeof prop !== "string") {
         throw new Error("Property key must be a string");
       }
-      if (!Object.hasOwn(schema, prop)) {
+      if (!(prop in schema)) {
         throw new Error(`${prop} is not in schema`);
       }
       const expectedType = schema[prop];
       if (expectedType === "object") {
         if (typeof value !== "object" || value === null) {
-          throw new Error("wrong type");
+          throw new Error(`Expected object for "${prop}"`);
         }
       } else if (typeof value !== expectedType) {
-        throw new Error("wrong type");
+        throw new Error(`Expected ${expectedType} for "${prop}"`);
       }
 
       return Reflect.set(target, prop, value, receiver);
